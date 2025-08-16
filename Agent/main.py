@@ -4,7 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain.agents import create_tool_calling_agent, AgentExecutor
-from tools import search_tool, wikipedia_tool, get_product_list_by_user 
+from tools import search_tool, wikipedia_tool, get_student_list 
 
 #load environment variables
 load_dotenv()
@@ -24,11 +24,10 @@ prompt = ChatPromptTemplate.from_messages(
     [
         ("system", 
          """
-        For any purchase-related question, always use the get_product_list_by_user tool.
-        The tool returns a list of purchases as structured data (list of dictionaries with item_name, amount, date).
-        You can use this data to answer follow-up questions, such as the price, or date of a specific item, or to summarize the user's purchase history.
-        If the user asks about a specific detail (e.g., price of an item), extract it from the tool's output and include it in your response.
- 
+        For any student-related question, always use the get_student_list tool.
+        The tool returns a list of students as structured data (list of dictionaries with name, studentid, totalmarks, emergencycontact, dateofbirth, classname, etc.).
+        You can use this data to answer follow-up questions, such as the total marks, or class name of a specific student, or to summarize the student's information.
+        If the user asks about a specific detail (e.g., total marks of a student), extract it from the tool's output and include it in your response.
         """),
         ("human","{query}"),
         ("placeholder","{chat_history}"),
@@ -41,7 +40,7 @@ geminiLLM = ChatGoogleGenerativeAI(
     max_tokens=500
 )
 
-tools = [get_product_list_by_user, search_tool, wikipedia_tool]
+tools = [get_student_list, search_tool, wikipedia_tool]
 
 agent = create_tool_calling_agent(
     llm=geminiLLM,
@@ -60,7 +59,7 @@ chat_history = []
 
 while True:
     query = input("You: ")
-    if query.lower() in ["exit", "quit"]:
+    if query.lower() in ["exit", "quit", "end"]:
         break
 
     response = agent_executor.invoke({
@@ -80,7 +79,7 @@ while True:
         if isinstance(response["summary"], list):
             chat_history.append({
                 "role": "system",
-                "content": f"FACT: Previous purchase data: {json.dumps(response['summary'])}"
+                "content": f"FACT: Previous student data: {json.dumps(response['summary'])}"
             })
         else:
             chat_history.append({

@@ -1,20 +1,22 @@
 from langchain_community.tools import WikipediaQueryRun, DuckDuckGoSearchRun
 from langchain_community.utilities import WikipediaAPIWrapper
-from langchain.tools import Tool, tool
+from langchain.tools import Tool, tool  
 from datetime import datetime
 import logging
-from productservice import get_shopping_list, get_user, get_shopping_list_user
+from apiservice import get_student_list
 
 logging.basicConfig(filename='tool_debug.log', level=logging.INFO)
 
 search = DuckDuckGoSearchRun()
 
+# Tool 1: DuckDuckGoSearch
 search_tool = Tool(
     func=search.run,
     name="DuckDuckGoSearch",
     description="Useful for when you need to answer questions about current events or general knowledge. Input should be a search query.",
 )
 
+# Tool 2: Wikipedia
 api_wrapper = WikipediaAPIWrapper(
     top_k_results=5,
     max_length=500,
@@ -25,25 +27,22 @@ api_wrapper = WikipediaAPIWrapper(
 
 wikipedia_tool = WikipediaQueryRun(api_wrapper=api_wrapper)
 
-@tool("GetProductUserInfo")
-def get_product_list_by_user() -> str:
+# Tool 3: GetStudentList
+@tool("GetStudentList")
+def get_student_list() -> str:
     '''
-    You are the assistant helping to answer questions for purchasing. 
-    Access the purchase history. Use this tool to get the product list, user list and purchase history. 
+    You are the assistant helping to answer questions for school information. 
+    Access the student list. Use this tool to get the student list and their details.
     '''
-    logging.info(f"Query received for user")
+    logging.info(f"Query received for student list")
 
-    user_info = get_user()
-    shopping_list = get_shopping_list()
-    purchases = get_shopping_list_user()
+    student_list = get_student_list()
 
-    logging.info(f"User Info: {user_info}")
-    logging.info(f"Shopping List: {shopping_list}")
-    logging.info(f"Purchase: {purchases}")
+    logging.info(f"Student List: {student_list}")
 
-    if purchases:
-        logging.info(f"yes: {purchases}")
-        return purchases  
+    if student_list:
+        logging.info(f"yes: {student_list}")
+        return student_list
     else:
-        logging.info(f"No: {purchases}")
-        return f"No purchases found for."
+        logging.info(f"No: {student_list}")
+        return f"No students found."
