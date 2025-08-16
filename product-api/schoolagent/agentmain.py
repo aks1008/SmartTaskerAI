@@ -1,9 +1,11 @@
 from dotenv import load_dotenv
+from flask import jsonify
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.agents import create_tool_calling_agent, AgentExecutor
 from langchain.memory import ConversationBufferMemory
-from tools import search_tool, wikipedia_tool, get_student_list 
+from schoolagent.tools import search_tool, wikipedia_tool, get_student_list 
+from langchain_core.messages import HumanMessage, AIMessage
 
 #load environment variables
 load_dotenv()
@@ -48,12 +50,41 @@ agent_executor = AgentExecutor(
     memory=memory
 )
 
-while True:
-    query = input("You: ")
+def serialize_message(msg):
+    if isinstance(msg, HumanMessage) or isinstance(msg, AIMessage):
+        return {
+            "type": msg.__class__.__name__,
+            "content": msg.content
+        }
+    return str(msg)  # fallback for unknown types
+
+def chatbotquery(query):
+    '''
+    take query as input and provide output
+    '''
     if query.lower() in ["exit", "quit", "end"]:
-        break
+        return
 
     # The AgentExecutor with memory handles history automatically.
     # We only need to pass the input variable 'query'.
     response = agent_executor.invoke({"query": query})
+    print("Full resopnse",response)
     print("Agent:", response['output'])
+    
+    #return ({"response": response})
+
+    # Serialize chat history
+    chat_history = response.get("chat_history", [])
+    serialized_history = [serialize_message(msg) for msg in chat_history]
+
+    # Serialize intermediate steps if needed
+    intermediate_steps = response.get("intermediate_steps", [])
+    serialized_steps = [str(step) for step in intermediate_steps]
+
+    return {
+        "query": query,
+        "output": response.get("output"),
+        "chat_history": serialized_history,
+        "intermediate_steps": serialized_steps
+    }
+

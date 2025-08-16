@@ -56,4 +56,5 @@ while True:
     # The AgentExecutor with memory handles history automatically.
     # We only need to pass the input variable 'query'.
     response = agent_executor.invoke({"query": query})
+    print("Full resopnse: ",response)
     print("Agent:", response['output'])
