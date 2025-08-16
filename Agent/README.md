@@ -3,7 +3,7 @@
 1. Create environment and activate it:
    ```bash
    python -m venv venv
-   venv/bin/activate
+   venv\Scripts\activate
    ```
    
 2. Create requirement.txt file with dependencies list and install them using pip:

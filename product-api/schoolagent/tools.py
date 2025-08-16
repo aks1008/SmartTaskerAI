@@ -3,7 +3,7 @@ from langchain_community.utilities import WikipediaAPIWrapper
 from langchain.tools import Tool, tool  
 from datetime import datetime
 import logging 
-from apiservice import get_student_list as api_get_student_list
+from schoolagent.apiservice import get_student_list as api_get_student_list
 
 logging.basicConfig(filename='tool_debug.log', level=logging.INFO)
 

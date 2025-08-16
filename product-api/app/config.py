@@ -12,6 +12,6 @@ class Config:
     parentdir = os.path.dirname(basedir)
     
     # Use SQLite database for local development
-    databaseuri = 'sqlite:///' + os.path.join(parentdir, 'product.db')
+    databaseuri = 'sqlite:///' + os.path.join(parentdir, 'school.db')
     print(f"Using database URI: {databaseuri}")
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", databaseuri)
