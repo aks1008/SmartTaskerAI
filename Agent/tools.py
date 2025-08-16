@@ -2,8 +2,8 @@ from langchain_community.tools import WikipediaQueryRun, DuckDuckGoSearchRun
 from langchain_community.utilities import WikipediaAPIWrapper
 from langchain.tools import Tool, tool  
 from datetime import datetime
-import logging
-from apiservice import get_student_list
+import logging 
+from apiservice import get_student_list as api_get_student_list
 
 logging.basicConfig(filename='tool_debug.log', level=logging.INFO)
 
@@ -36,7 +36,7 @@ def get_student_list() -> str:
     '''
     logging.info(f"Query received for student list")
 
-    student_list = get_student_list()
+    student_list = api_get_student_list()
 
     logging.info(f"Student List: {student_list}")
 
