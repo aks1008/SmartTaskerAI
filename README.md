@@ -15,6 +15,9 @@ SmartTaskerAI is an intelligent task management system designed to streamline wo
 4. Implements a RESTful API for seamless communication between the frontend and backend.
 5. Model Context Protocol (MCP) for efficient data handling and processing.
 
+<img width="1878" height="1016" alt="image" src="https://github.com/user-attachments/assets/7d5ec88a-bf23-4385-9ac3-de99067c02f4" />
+
+
 ## Project Local Setup
 1. Initiale DB setup
    - Create a SQLServer database named `product.db`.
