@@ -90,7 +90,7 @@ http://127.0.0.1:5005/
    ```
 8. Open your web browser and navigate to `http://localhost:5005` to access the SmartTaskerAI application.
 
-
+```
 SmartTaskerAI/
 ├── LICENSE
 ├── README.md
@@ -121,3 +121,4 @@ SmartTaskerAI/
     │   └── __pycache__/
     ├── static/
     └── venv/
+```
